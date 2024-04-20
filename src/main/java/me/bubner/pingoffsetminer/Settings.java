@@ -1,4 +1,4 @@
-package holo.pingoffsetminer;
+package me.bubner.pingoffsetminer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
@@ -61,7 +61,7 @@ public class Settings extends CommandBase {
             double speed = Util.getConfig().get("settings", "miningSpeed", -1.0).getDouble();
             boolean active = Util.getConfig().get("settings", "active", true).getBoolean();
             double ping = Util.getConfig().get("settings", "ping", -1.0).getDouble();
-            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("§4[§cPOM§4]§7 mining speed: " + (speed == -1 ? "NOT SET" : speed) + ", ping: " + (ping == -1 ? "NOT SET" : ping) + ", active: " + active));
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("§4[§cPOM§4]§7 mining speed: " + (speed == -1 ? "NOT SET" : speed) + ", ping: " + (ping == -1 ? "NOT SET" : ping) + ", active: " + active + "\n" + USAGE));
         }
     }
 }

@@ -15,7 +15,7 @@ plugins {
 apply plugin: "net.minecraftforge.gradle.forge"
 
 version = "1.0"
-group = "holo.pingoffsetminer"
+group = "me.bubner.pingoffsetminer"
 archivesBaseName = "pingoffsetminer-1.8.9"
 
 sourceCompatibility = targetCompatibility = 1.8

@@ -1,9 +1,9 @@
-package holo.pingoffsetminer;
+package me.bubner.pingoffsetminer;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
-import net.minecraft.world.World;
 
 import java.util.HashMap;
 
@@ -15,9 +15,9 @@ public class MiningSpeedCalculator {
         put("skyblock:titanium", 2000);
     }};
 
-    public static String getBlockName(Block block, World world, BlockPos eventPos) {
+    public static String getBlockName(Block block, BlockPos eventPos) {
         try {
-            int meta = block.getMetaFromState(world.getBlockState(eventPos));
+            int meta = block.getMetaFromState(Minecraft.getMinecraft().theWorld.getBlockState(eventPos));
             if (block == Blocks.wool && meta == 7 || (block == Blocks.stained_hardened_clay && meta == 9)) {
                 return "skyblock:gray_mithril";
             }

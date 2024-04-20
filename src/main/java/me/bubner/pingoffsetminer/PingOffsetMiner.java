@@ -1,4 +1,4 @@
-package holo.pingoffsetminer;
+package me.bubner.pingoffsetminer;
 
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
