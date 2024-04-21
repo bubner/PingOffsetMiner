@@ -1,4 +1,4 @@
-# PingOffsetMiner
+# Ping Offset Miner
 ### Forge 1.8.9 Hypixel Skyblock
 ##### Command: /pom
 A mod that takes into account ping offset when mining ores in Hypixel Skyblock, allowing for faster mining.  
