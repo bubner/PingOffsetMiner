@@ -56,7 +56,7 @@ public class BlockTiming {
         glPopMatrix();
     }
 
-    @SubscribeEvent(priority = EventPriority.NORMAL)
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (!Util.getConfig().get("settings", "active", true).getBoolean())
             return;
@@ -87,11 +87,12 @@ public class BlockTiming {
 
         // TODO: Dynamic ping calculation?
         double ping = Util.getConfig().get("settings", "ping", -1.0).getDouble();
+        double pingOffsetTime = time;
         if (ping != -1 && time != -1) {
-            // TODO: Might need to tune this offset to be more accurate and not dropping below the actual ping?
-            time -= ping / 1000.0;
+            pingOffsetTime -= ping / 1000.0;
         }
+        pingOffsetTime = Math.max(pingOffsetTime, ping / 1000.0);
         blockPos = time != -1 ? rt.getBlockPos() : null;
-        timeoutExceeded = time != -1 && timer.seconds() >= time;
+        timeoutExceeded = time != -1 && timer.seconds() >= pingOffsetTime;
     }
 }
