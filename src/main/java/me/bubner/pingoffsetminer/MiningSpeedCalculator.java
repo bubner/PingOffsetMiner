@@ -86,7 +86,7 @@ public class MiningSpeedCalculator {
                     case 13:
                         return "skyblock:peridot_gemstone";
                 }
-            if (block == Blocks.clay || block == Blocks.cobblestone) // TODO: Could do an island check so we don't highlight extraneously when they can't exist there
+            if (block == Blocks.clay || (block == Blocks.monster_egg && meta == 1))
                 return "skyblock:tungsten";
             if ((block == Blocks.stained_hardened_clay && meta == 12) || block == Blocks.hardened_clay || block == Blocks.double_stone_slab2 || block == Blocks.red_sandstone)
                 return "skyblock:umber";
