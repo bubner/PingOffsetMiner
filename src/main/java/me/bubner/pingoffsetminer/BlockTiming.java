@@ -14,14 +14,14 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import static org.lwjgl.opengl.GL11.*;
 
 public class BlockTiming {
-    private final ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     private BlockPos blockPos;
     private boolean timeoutExceeded;
+    private int ticksElapsed;
+    private double ticksRemaining;
 
-    // TODO: Might be able to draw a box around a nearby target to mine instead?
     @SubscribeEvent
     public void renderBlockOverlay(DrawBlockHighlightEvent e) {
-        if (blockPos == null)
+        if (blockPos == null || ticksRemaining == -1)
             return;
 
         glPushMatrix();
@@ -58,26 +58,29 @@ public class BlockTiming {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (!Util.getConfig().get("settings", "active", true).getBoolean())
+        if (!Util.getConfig().get("settings", "active", true).getBoolean() || !Util.isInSkyblock())
             return;
 
         Minecraft mc = Minecraft.getMinecraft();
         MovingObjectPosition rt = mc.objectMouseOver;
         if (rt == null || rt.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) {
             blockPos = null;
+            ticksElapsed = -1;
+            ticksRemaining = -1;
             return;
         }
-
-        boolean isMouseHeld = mc.gameSettings.keyBindAttack.isKeyDown();
-
-        if (!isMouseHeld || (blockPos != null && !rt.getBlockPos().equals(blockPos))) {
-            timer.reset();
+        if (!mc.gameSettings.keyBindAttack.isKeyDown() || (blockPos != null && !rt.getBlockPos().equals(blockPos))) {
+            blockPos = null;
+            ticksElapsed = -1;
+            ticksRemaining = -1;
         }
+        blockPos = rt.getBlockPos();
+        ticksElapsed++;
 
         WorldClient world = mc.theWorld;
         if (world == null) return;
         Block currentBlock = world.getBlockState(rt.getBlockPos()).getBlock();
-        double time = MiningSpeedCalculator.getSecondsToBreak(
+        ticksRemaining = MiningSpeedCalculator.getTicksToBreak(
                 MiningSpeedCalculator.blockHardnesses.getOrDefault(
                         MiningSpeedCalculator.getBlockName(currentBlock, rt.getBlockPos()),
                         -1
@@ -87,12 +90,10 @@ public class BlockTiming {
 
         // TODO: Dynamic ping calculation?
         double ping = Util.getConfig().get("settings", "ping", -1.0).getDouble();
-        double pingOffsetTime = time;
-        if (ping != -1 && time != -1) {
-            pingOffsetTime -= ping / 1000.0;
-        }
-        pingOffsetTime = Math.max(pingOffsetTime, ping / 1000.0);
-        blockPos = time != -1 ? rt.getBlockPos() : null;
-        timeoutExceeded = time != -1 && timer.seconds() >= pingOffsetTime;
+        double pingOffsetTime = ticksRemaining;
+        if (ping != -1 && ticksRemaining != -1)
+            pingOffsetTime -= ping / 20000.0; // ms to ticks (ms/1000/20)
+        pingOffsetTime = Math.max(pingOffsetTime, ping / 20000.0);
+        timeoutExceeded = ticksRemaining != -1 && ticksElapsed >= pingOffsetTime;
     }
 }

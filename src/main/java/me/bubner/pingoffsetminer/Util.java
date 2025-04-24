@@ -29,8 +29,6 @@ public class Util {
         }
     }
 
-
-    // TODO: Implement
     /**
      * Check if the user is in SkyBlock by analysing the scoreboard.
      */
