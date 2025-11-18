@@ -75,7 +75,7 @@ public class MiningSpeedCalculator {
                         return "skyblock:opal_gemstone";
                     case 4:
                         return "skyblock:topaz_gemstone";
-                    case 6:
+                    case 2:
                         return "skyblock:jasper_gemstone";
                     case 15:
                         return "skyblock:onyx_gemstone";
